@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% extends "cabecera.html" %}
+    {% block content %}
+     <div id="dvLogin" style="margin: auto; width: 500px;  padding: 8%;">
+            <form action="/inicio_sesion" method="post" style=" position: relative; max-width: 400px; padding: 50px; padding-bottom: 20px; text-align: center;
+             box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24); ">
+                <label for="edEUsr" style="float:left">USUARIO </label>
+                <input type="text" name="edEUsr" id="edEUsr" style="width: 100%" placeholder="Usuario..."/><br><br>
+                <label for="edPassword" style="float:left">CONTRASEÑA </label>
+                <input type="text" name="edPassword" id="edPassword" style="width: 100%" placeholder="Password..."/><br><br>
+                <input type="submit" value="Enviar" />
+            </form>
+
+
+            <div id="dvErrorMsg" style="font-weight: bold; color: white; background-color: red; margin-top: 10px;">
+                 {% with error_messages = get_flashed_messages() %}
+                    {% if error_messages %}
+                        {% for message in error_messages %}
+                            {{ message }}
+                        {% endfor %}
+                    {% endif %}
+                 {% endwith %}
+            </div>
+    </div>
+    {% endblock %}
+</body>
+</html>

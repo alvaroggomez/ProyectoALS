@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Metacritic</title>
+
+    <script>
+    </script>
+</head>
+<body>
+    {% extends "cabecera.html" %}
+    {% block content %}
+    <div id="dvJuegosList">
+        {% if juegos_list %}
+            <p>
+            {% for juego in juegos_list %}
+                <div onclick="location.href='juego?oid={{ juegos_oids[juego.__oid__] }}';" id="juegolista" style="cursor: pointer; margin-left:50px;
+                        width: 220px; float: left; border-bottom: medium orangered solid; padding: 5px">
+                    <div id="img&Nota" style="position: relative;">
+                        <img  height="300" width="220" src="{{ url_for('static', filename = juego.imagen) }}">
+                        <h1 style="font-weight: bold; border: medium solid #0F9972; border-radius: 20%; position: absolute; z-index: 3; right: 5%;
+                            top: 1%; text-align: center; width:50px; height: 50px; line-height: 50px; background-color: #0DFFBB">
+                            {{ juego.medianotacrit }}</h1>
+                    </div>
+                    <div id="tituloResumen" style="height: 150px; padding: 5px">
+                        <h4 style="font-weight: bold; display: inline-block; margin-bottom: 0">{{ juego.titulo }}</h4>
+                        <p style="max-height: 4.5em; overflow: hidden;">Sinopsis: {{ juego.resumen }}</p>
+                    </div>
+
+                </div>
+            {% endfor %}
+            </p>
+        {% else %}
+            <h1><b>No hay reseñas de juegos. Inicie sesión con un usuario 'admin' para crear una reseña.</b></h1>
+        {% endif %}
+    </div>
+    {% endblock %}
+</body>
+</html>

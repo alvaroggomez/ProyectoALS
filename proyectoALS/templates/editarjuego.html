@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Juego</title>
+</head>
+<body>
+    {% extends "cabecera.html" %}
+    {% block content %}
+    {% if usr.usuario != game.autor %}
+        <h2>Solo el usuario que creó la reseña puede editarla</h2>
+    {% else %}
+
+        <div id="dvFormEditarJuego" style="margin: auto; width: 500px;  padding: 6%;">
+        <form action="/editar_juego?oid={{ safe_oid }}&nota={{ game.nota }}" method="post" enctype = "multipart/form-data" style="position: relative; max-width: 420px; padding: 45px; text-align: center;
+             box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24); ">
+            <h2 style="margin-top:1%">Editar reseña:</h2><br>
+            <label for="edTitulo">Titulo </label>
+            <input type="text" name="edTitulo" id="edTitulo" style="width: 100%;" value="{{ game.titulo }}"/><br>
+            <label for="edResumen">Resumen </label>
+            <textarea type="text" name="edResumen" id="edResumen" style="resize: none; width: 100%;" rows="4" cols="50">{{ game.resumen }}</textarea><br>
+            <label for="edNota">Nota </label>
+            <input type="text" name="edNota" id="edNota" style="width: 100%;" value="{{ game.nota }}"/><br>
+            <label for="edImagen">Carátula</label><br>
+            <input type="file" id="edImagen" name="edImagen"  accept=".png,.jpg,.jpeg" value="{{ game.imagen }}"><br><br>
+            <input type="button" value="Cancelar" onclick="location.href='juego?oid={{ safe_oid }}';" />
+            <input type="submit" value="Aceptar" />
+        </form>
+
+
+        <div id="dvErrorMsg" style="font-weight: bold; color: white; background-color: red">
+             {% with error_messages = get_flashed_messages() %}
+                {% if error_messages %}
+                    {% for message in error_messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+             {% endwith %}
+        </div>
+    </div>
+    {% endif %}
+    {% endblock %}
+</body>
+</html>

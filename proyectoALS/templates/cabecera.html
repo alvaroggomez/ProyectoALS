@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GamesCritic</title>
+</head>
+<body style="margin: 0; font-family:Calibri;">
+    <div id="dvHeader" style="overflow: hidden; font-weight: bold; color: white; background-color: #1f1f23; border-bottom-style: solid; border-bottom-color: #FF8400">
+        <h1 onclick="location.href='/';" style="cursor: pointer; display: inline-block;  color: #0DFFBB; padding-left: 2%; text-shadow: -2px 0 #12B385">
+            GamesCritic
+        </h1>
+        <div id="login">
+            {% if usr %}
+                {% if usr.access == 'admin' %}
+                    <a href=Anhadirjuego style="display: inline-block; color:white; text-decoration: none; padding-left: 2%; font-size: 20px">
+                        Añadir Juego
+                    </a>
+                {% endif %}
+
+                {% if usr.is_anonymous %}
+                    {anonymous}
+                {% endif %}
+
+                <form action="/logout" style="display: inline-block; float:right; padding: 5px; font-size: 25px ">
+                    <label for="edUsr">{{ usr.usuario }} </label>
+                    <input type="submit" style="cursor: pointer; background-color: white; color: black; border: 2px solid #e7e7e7; border-radius: 10%" value="Logout" />
+                </form>
+
+            {% else %}
+                <a href=login_pag style="float:right; text-decoration: none; color:white; padding:1%">
+                    Iniciar Sesión
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    {% block content %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Borrar Juego</title>
+</head>
+<body>
+    {% extends "cabecera.html" %}
+    {% block content %}
+    {% if usr.usuario != game.autor %}
+        <h2>Solo el usuario que creó la reseña puede borrarla</h2>
+    {% else %}
+
+        <div id="dvFormBorrarJuego" style="margin: auto; width: 500px;  padding: 6%;">
+        <form action="/borrar_juego?oid={{ safe_oid }}" method="post" style="position: relative; max-width: 420px; padding: 45px; text-align: center;
+             box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24); ">
+            <h1>Borrar reseña:</h1><br>
+            <label for="edTitulo">Titulo: </label>
+            <input type="text" readonly="readonly" style="width: 100%;" value="{{ game.titulo }}"/><br>
+            <label for="edResumen">Resumen: </label>
+            <input type="text" readonly="readonly" style="resize: none; width: 100%;" value="{{ game.resumen }}"/><br>
+            <label for="edNota">Nota: </label>
+            <input type="text" readonly="readonly" style="width: 100%;" value="{{ game.nota }}"/><br>
+            <label for="edImagen">Portada: </label>
+            <input type="text" readonly="readonly" style="width: 100%;" value="{{ game.imagen }}"/><br><br>
+            <input type="button" value="Cancelar" onclick="location.href='juego?oid={{ safe_oid }}';" />
+            <input type="submit" value="Aceptar" />
+        </form>
+    </div>
+    {% endif %}
+    {% endblock %}
+</body>
+</html>

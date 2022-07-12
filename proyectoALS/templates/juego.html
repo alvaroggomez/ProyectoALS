@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script>
+    </script>
+</head>
+<body>
+    {% extends "cabecera.html" %}
+    {% block content %}
+    <div id="dvJuegosList" style="margin:2%">
+        {% if game %}
+                <div id ="blockJuego" style="width:32%; display: inline-block; vertical-align: top; ">
+                    <h2 style="margin-top: 0px; margin-bottom: 0; background-color: #FF8400; color: black; border: solid black; border-bottom: none">
+                        {{ game.titulo }}</h2>
+                    <div id="juego" style=" display: flex;  text-align: center; border:solid black">
+                        <div id="imagenJuego" style="border-right: solid black; margin-right: 1%">
+                            <img height="280" width="200" src="{{ url_for('static', filename = game.imagen) }}" >
+                            {% if usr.usuario == game.autor %}
+                                <div id="opcionesAutor">
+                                    <p onclick="location.href='editarjuego?oid={{ safe_oid }}';" style="display:inline-block; cursor: pointer; border: solid black; background-color: #97E3E6">
+                                        Editar reseña</p>
+                                    <p onclick="location.href='borrarjuego?oid={{ safe_oid }}';" style="display:inline-block; cursor: pointer; border: solid black; background-color: #F5ACAC">
+                                        Borrar reseña</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div style="text-align: left; ">
+                            <p><b>Autor: </b>{{ game.autor }}</p>
+                            <p><b>Sinopsis:</b> {{ game.resumen }}</p>
+                        </div>
+                    </div>
+
+                    {% if usr %}
+                        <div id="dvFormAdd" style="display: inline-block; width:99%; vertical-align: top;  border: solid black; margin-top:1%;">
+                            <h4 style="margin-top: 0px; background-color: grey; color: white">Escriba un comentario</h4>
+                            <form action="/addcomentario/?oid={{ safe_oid }}" method="post" style="padding-left:1%">
+                                <label for="edComentario">Comentario </label><br>
+                                <input type="text" name="edComentario" id="edComentario" style="width: 97%" placeholder="Comentario ..."/><br>
+                                <label for="edNota">Nota </label><br>
+                                <input type="text" name="edNota" id="edNota" style="width: 97%" placeholder="Nota... (0-100)"/><br><br>
+                                <input type="submit" style="cursor: pointer; background-color: floralwhite; color: black; border: 2px solid black; border-radius: 10%" value="Comentar" />
+                            </form>
+
+
+                            <div id="dvErrorMsg" style="font-weight: bold; color: white; background-color: red">
+                                {% with error_messages = get_flashed_messages() %}
+                                    {% if error_messages %}
+                                        {% for message in error_messages %}
+                                            {{ message }}
+                                        {% endfor %}
+                                    {% endif %}
+                                {% endwith %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <div id="dvFormAdd" style="display: inline-block; width:99%; vertical-align: top;  border: solid black; margin-top:1%;">
+                            <h3 style="margin-top: 0px; margin-bottom: 0px; background-color: grey; color: white">Inicie sesión para comentar</h3>
+                        </div>
+                    {% endif %}
+                </div>
+
+                <div id="reseCrit" style="display: inline-block; width:32%; vertical-align: top; border: black groove">
+                    <h2 style="margin-top: 0px; background-color: black; color: white">Reseñas criticas</h2>
+                    <div id="notaCrit" style="margin-left:10px; display: flex">
+                        <h1 style="margin-top:5px; display:inline-block;  padding: 3px;  font-weight: bold; border: medium solid #0F9972; border-radius: 20%;
+                            text-align: center; width:50px; height: 50px; line-height: 50px; background-color: #0DFFBB">
+                            {{ game.medianotacrit }}</h1>
+                        <p style="margin-left: 5px">Nota media de {{ numCriticas + 1}} usuarios. *Se incluye la nota del autor de la reseña</p>
+                    </div>
+
+                    {% for r in resenhasCriticas %}
+                        <div id="resenha" style="padding: 4px; margin: 0 10px 10px; background-color:#FFFFFA; border: solid dimgrey; border-radius: 4px ">
+
+                            <p style="font-weight: bold; border: medium solid #0F9972; border-radius: 20%; display:inline-block; text-align: center;
+                            width:25px; height: 25px; line-height: 25px; background-color: #0DFFBB; margin-bottom:0;">
+                                {{ r.notacrit }}</p>
+                            <p style="display: inline-block; margin-bottom:0;"><b>Usuario: </b>{{ r.usuario }}</p>
+                            <p style="display: inline-block; float:right; ">{{ r.fecha }}</p>
+                            <p style=" text-align: left;"> {{ r.comentariocrit }}</p>
+
+                        {% if usr.usuario == r.usuario %}
+                            <form action="/borrarComentario/?oid={{ comentarios_oids[r.__oid__] }}&juego={{ safe_oid }}&nota={{ r.notacrit }}" method="post">
+                                <input type="submit" value="Eliminar Comentario" />
+                            </form>
+                        {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <div id="reseUsers" style="display: inline-block; width:32%; vertical-align: top; border: black groove">
+                    <h2 style="margin-top: 0px; background-color: black; color: white">Reseñas usuarios</h2>
+                    <div id="notaUsers" style="margin-left:10px; display: flex">
+                         <h1 style="margin-top:5px; display:inline-block;  padding: 3px;  font-weight: bold; border: medium solid #A85700; border-radius: 50%;
+                            text-align: center; width:50px; height: 50px; line-height: 50px; background-color: #FF8400">
+                            {{ game.medianotausr }}</h1>
+                        <p style="margin-left: 5px">Nota media de {{ numNotasUsers }} usuarios</p>
+                    </div>
+
+                    {% for r in resenhasUsers %}
+                        <div id="resenha" style="padding: 4px; margin: 0 10px 10px; background-color:#FFFFFA; border: solid dimgrey; border-radius: 4px ">
+
+                            <p style="font-weight: bold; border: medium solid #A85700; border-radius: 50%;display:inline-block; text-align: center; width:25px; height: 25px; line-height: 25px; background-color: #FF8400; margin-bottom:0;">
+                                {{ r.notausr }}</p>
+                            <p style="display: inline-block; margin-bottom:0;"><b>Usuario: </b>{{ r.usuario }}</p>
+                            <p style="display: inline-block; float:right; ">{{ r.fecha }}</p>
+                            <p style=" text-align: left;"> {{ r.comentariousr }}</p>
+
+                        {% if usr.usuario == r.usuario %}
+                            <form action="/borrarComentario/?oid={{ comentarios_oids_usrs[r.__oid__] }}&juego={{ safe_oid }}&nota={{ r.notausr }}" method="post">
+                                <input type="submit" style="cursor: pointer; background-color: #FFBDB7; color: black; border: 2px solid black; border-radius: 10%" value="Eliminar Comentario" />
+                            </form>
+                        {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+
+
+        {% else %}
+            <p><b>No hay reseñas de juegos.</b></p>
+        {% endif %}
+    </div>
+
+    {% endblock %}
+</body>
+</html>

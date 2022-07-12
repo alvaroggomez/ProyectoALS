@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    {% extends "cabecera.html" %}
+    {% block content %}
+    {% if not usr or usr.access != 'admin' %}
+        <h2>Para añadir juego debes haber iniciado sesión como usuario crítico</h2>
+    {% else %}
+
+    <div id="dvForm" style="margin: auto; width: 500px;  padding: 6%; border-style: solid; border-color: purple; margin-top:5%">
+        <form action="/save_juego" method="post" enctype = "multipart/form-data" style="position: relative; max-width: 420px; padding: 45px; text-align: center;
+             box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24); ">
+            <label for="edTitulo">Titulo </label><br>
+            <input type="text"  name="edTitulo" id="edTitulo" placeholder="Titulo del juego..." style="width: 100%;"/><br>
+            <label for="edResumen">Resumen </label><br>
+            <textarea style="resize: none; width: 100%" type="text" name="edResumen" id="edResumen"  rows="4" cols="50" placeholder="Sinopsis del juego..." ></textarea><br>
+            <label for="edNota">Nota </label><br>
+            <input type="text" name="edNota" id="edNota" placeholder="Nota del juego (0-100)" style="width: 100%;"/><br>
+            <label for="edImagen">Carátula</label><br>
+            <input type="file" id="edImagen" name="edImagen" accept=".png,.jpg,.jpeg"><br><br>
+            <input type="submit" value="Añadir juego" />
+        </form>
+
+        <div id="dvErrorMsg" style="font-weight: bold; color: white; background-color: red; margin-top: 10px;">
+             {% with error_messages = get_flashed_messages() %}
+                {% if error_messages %}
+                    {% for message in error_messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+             {% endwith %}
+        </div>
+    </div>
+    {% endif %}
+    {% endblock %}
+</body>
+</html>
